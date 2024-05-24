@@ -28,6 +28,8 @@ clock = pg.time.Clock()
 number_iter = 0
 time = 0
 
+sped = 0
+
 skull = pg.image.load('skull.png')
 pause = pg.image.load('pause_button.png')
 retry = pg.image.load('retry.png')
@@ -104,6 +106,16 @@ while game_run:
         if e.y == HEIGHT:
             e.y = 18
             e.x = randint(0, WIDTH - 16)
+            if time >= 30 <= 45 and sped == 0:
+                e.speed += 0.1
+                sped += 1
+            elif time >= 45 <= 60 and sped == 1:
+                e.speed += 0.5
+                sped += 1
+            elif time >= 60 and sped == 2:
+                e.speed += 1.5
+            else:
+                e.speed = 2
         if distance(plr.x, plr.y, e.x, e.y) <= 16:
             game_loss = True
 pg.quit()
