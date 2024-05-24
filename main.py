@@ -56,7 +56,15 @@ while game_run:
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1:
                 pos = pg.mouse.get_pos()
-
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_z:
+                number_iter = 30 * fps
+            if event.key == pg.K_x:
+                number_iter = 45 * fps
+            if event.key == pg.K_c:
+                number_iter = 60 * fps
+            if event.key == pg.K_o:
+                number_iter = 0
     keys = pg.key.get_pressed()
     move = keys[pg.K_d] - keys[pg.K_a]
     shoot = keys[pg.K_SPACE]
@@ -103,7 +111,7 @@ while game_run:
 
     # Maths
     for e in asteroids:
-        if e.y == HEIGHT:
+        if e.y >= HEIGHT:
             e.y = 18
             e.x = randint(0, WIDTH - 16)
             if time >= 30 <= 45 and sped == 0:
