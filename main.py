@@ -8,6 +8,14 @@ from random import randint
 # Initing pg.
 pg.init()
 
+# Music
+pg.mixer.init()
+music = pg.mixer.music.load('music.mp3')
+pg.mixer.music.set_volume(0.7)
+pg.mixer.music.play(loops=-1)
+hit = pg.mixer.Sound('hitSoundEffect.mp3')
+click = pg.mixer.Sound('click.mp3')
+
 
 def distance(x1, y1, x2, y2):
     return sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
@@ -20,8 +28,8 @@ fps = 60
 WIDTH = 300
 HEIGHT = 600
 screen = pg.display.set_mode([WIDTH, HEIGHT])
-pg.display.set_caption("Space Wars")
-pg.display.set_icon(pg.image.load("icon.png"))
+pg.display.set_caption('Space Wars')
+pg.display.set_icon(pg.image.load('icon.png'))
 clock = pg.time.Clock()
 
 # Timer
@@ -34,8 +42,8 @@ skull = pg.image.load('skull.png')
 pause = pg.image.load('pause_button.png')
 retry = pg.image.load('retry.png')
 
-asteroids = [Asteroid("asteroid.png", randint(0, WIDTH - 32), HEIGHT // 2, 2), Asteroid("asteroid.png", randint(0, WIDTH - 32), HEIGHT // 2, 2), Asteroid("asteroid.png", randint(0, WIDTH - 32), HEIGHT // 2, 2), Asteroid("asteroid.png", randint(0, WIDTH - 32), HEIGHT // 2, 2)]
-plr = Player("player.png", WIDTH // 2, HEIGHT - 50, 2)
+asteroids = [Asteroid('asteroid.png', randint(0, WIDTH - 32), randint(18, 30), 2), Asteroid('asteroid.png', randint(0, WIDTH - 32), randint(18, 30), 2), Asteroid('asteroid.png', randint(0, WIDTH - 32), randint(18, 30), 2), Asteroid('asteroid.png', randint(0, WIDTH - 32), randint(18, 30), 2)]
+plr = Player('player.png', WIDTH // 2, HEIGHT - 50, 2)
 
 # Fonts
 font = pg.font.Font('font.ttf', 24)
@@ -47,6 +55,7 @@ lose_height = lose_text.get_height()
 # Flags
 game_run = True
 game_loss = False
+click = False
 
 while game_run:
     # Logic
@@ -56,6 +65,7 @@ while game_run:
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1:
                 pos = pg.mouse.get_pos()
+                click = True
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_z:
                 number_iter = 30 * fps
@@ -104,8 +114,9 @@ while game_run:
         time = number_iter // fps
         number_iter += 1
 
-    if (WIDTH // 2 - 16 <= pos[0] <= WIDTH // 2 - 16 + 32 and HEIGHT // 2 + 100 <= pos[1] <= HEIGHT // 2 + 100 + 32):
+    if WIDTH // 2 - 16 <= pos[0] <= WIDTH // 2 - 16 + 32 and HEIGHT // 2 + 100 <= pos[1] <= HEIGHT // 2 + 100 + 32 and click == True and game_loss == True:
         game_loss = False
+        click.play()
 
     pg.display.flip()
 
@@ -125,5 +136,11 @@ while game_run:
             else:
                 e.speed = 2
         if distance(plr.x, plr.y, e.x, e.y) <= 16:
+            hit.play()
             game_loss = True
+    if game_loss == True:
+        pg.mixer.music.pause()
+    else:
+        pg.mixer.music.unpause()
+    click = False
 pg.quit()
