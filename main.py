@@ -14,7 +14,7 @@ music = pg.mixer.music.load('music.mp3')
 pg.mixer.music.set_volume(0.7)
 pg.mixer.music.play(loops=-1)
 hit = pg.mixer.Sound('hitSoundEffect.mp3')
-click = pg.mixer.Sound('click.mp3')
+clickSFX = pg.mixer.Sound('click.mp3')
 
 
 def distance(x1, y1, x2, y2):
@@ -43,7 +43,7 @@ pause = pg.image.load('pause_button.png')
 retry = pg.image.load('retry.png')
 
 asteroids = [Asteroid('asteroid.png', randint(0, WIDTH - 32), randint(18, 30), 2), Asteroid('asteroid.png', randint(0, WIDTH - 32), randint(18, 30), 2), Asteroid('asteroid.png', randint(0, WIDTH - 32), randint(18, 30), 2), Asteroid('asteroid.png', randint(0, WIDTH - 32), randint(18, 30), 2)]
-plr = Player('player.png', WIDTH // 2, HEIGHT - 50, 2)
+plr = Player('player.png', WIDTH // 2, HEIGHT - 50, 4)
 
 # Fonts
 font = pg.font.Font('font.ttf', 24)
@@ -116,7 +116,7 @@ while game_run:
 
     if WIDTH // 2 - 16 <= pos[0] <= WIDTH // 2 - 16 + 32 and HEIGHT // 2 + 100 <= pos[1] <= HEIGHT // 2 + 100 + 32 and click == True and game_loss == True:
         game_loss = False
-        click.play()
+        clickSFX.play()
 
     pg.display.flip()
 
@@ -125,16 +125,7 @@ while game_run:
         if e.y >= HEIGHT:
             e.y = 18
             e.x = randint(0, WIDTH - 16)
-            if time >= 30 <= 45 and sped == 0:
-                e.speed += 0.1
-                sped += 1
-            elif time >= 45 <= 60 and sped == 1:
-                e.speed += 0.5
-                sped += 1
-            elif time >= 60 and sped == 2:
-                e.speed += 1.5
-            else:
-                e.speed = 2
+            e.speed = e.speed * 1.05
         if distance(plr.x, plr.y, e.x, e.y) <= 16:
             hit.play()
             game_loss = True
