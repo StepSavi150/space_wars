@@ -36,9 +36,12 @@ clock = pg.time.Clock()
 number_iter = 0
 time = 0
 
-sped = 0
-
-skull = pg.image.load('skull.png')
+skulls = list()
+for i in range(2):
+    skulls.append(pg.image.load('skull' + str(i) + '.png'))
+animation_iter = 0
+number_frame = 0
+slow = fps // 2
 pause = pg.image.load('pause_button.png')
 retry = pg.image.load('retry.png')
 
@@ -95,11 +98,15 @@ while game_run:
         time_text = font.render(str(time), False, (0, 0, 0))
 
     if game_loss == True:
+        # Maths
+        number_frame = animation_iter // slow % 2
+        animation_iter += 1
+
         # Drawing Death Screen
         screen.fill((255, 255, 255))
         screen.blit(lose_text, (WIDTH // 2 - lose_width // 2, HEIGHT // 2 - lose_height))
         screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, HEIGHT // 2 - time_text.get_height() - 50))
-        screen.blit(skull, (WIDTH // 2 - 16, HEIGHT // 2 + 50))
+        screen.blit(skulls[number_frame], (WIDTH // 2 - 16, HEIGHT // 2 + 50))
         screen.blit(retry, (WIDTH // 2 - 16, HEIGHT // 2 + 100))
 
         # Reseting
